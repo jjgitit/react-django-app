@@ -33,18 +33,6 @@ function Home() {
       .catch((error) => alert(error));
   };
 
-  const createNote = (e) => {
-    e.preventDefault();
-    api
-      .post("/api/notes/", { content, title })
-      .then((res) => {
-        if (res.status === 201) alert("Note created!");
-        else alert("Failed to make note.");
-        getNotes();
-      })
-      .catch((err) => alert(err));
-  };
-
   return (
     <div>
       <header>
@@ -56,7 +44,7 @@ function Home() {
         </nav>
       </header>
       <div>
-        <h2>Notes</h2>
+        <h2>Posts</h2>
         {notes.map((note) => (
           <Note note={note} onDelete={deleteNote} key={note.id} />
         ))}

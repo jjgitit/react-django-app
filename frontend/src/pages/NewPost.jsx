@@ -1,20 +1,21 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "../api";
+import { useNavigate } from "react-router-dom";
 
 function NewPost() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+  const navigate = useNavigate();
 
-  const deleteNote = (id) => {
+  const getNotes = () => {
     api
-      .delete(`/api/notes/delete/${id}/`)
-      .then((res) => {
-        if (res.status === 204) alert("Note deleted!");
-        else alert("Failed to delete note.");
-        getNotes();
+      .get("/api/notes/")
+      .then((res) => res.data)
+      .then((data) => {
+        console.log(data);
       })
-      .catch((error) => alert(error));
+      .catch((err) => alert(err));
   };
 
   const createNote = (e) => {
@@ -22,13 +23,16 @@ function NewPost() {
     api
       .post("/api/notes/", { content, title })
       .then((res) => {
-        if (res.status === 201) alert("Note created!");
-        else alert("Failed to make note.");
+        if (res.status === 201) {
+          alert("Note created!");
+          navigate("/"); // Redirect to Home page
+        } else {
+          alert("Failed to make note.");
+        }
         getNotes();
       })
       .catch((err) => alert(err));
   };
-
   return (
     <form onSubmit={createNote}>
       <label htmlFor="title">Title:</label>
