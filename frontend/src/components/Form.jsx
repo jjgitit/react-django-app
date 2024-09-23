@@ -10,7 +10,8 @@ function Form({ route, method }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const name = method === "login" ? "Login" : "Register";
+  //for button name
+  const name = method === "login" ? "Login" : "Create Account";
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -51,7 +52,7 @@ function Form({ route, method }) {
         placeholder="password"
       />
       <button className="form-button" type="submit">
-        {name}
+        {name === "Login" ? "Login" : "Sign Up"}
       </button>
     </form>
   );
