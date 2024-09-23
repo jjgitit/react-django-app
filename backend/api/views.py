@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -25,6 +25,27 @@ class NoteListCreate(generics.ListCreateAPIView):
             serializer.save(author=self.request.user)
         else:
             print(serializer.errors)
+
+
+class UserNoteList(generics.ListAPIView):
+    """
+    View to list all notes created by a specific user
+    """
+
+    serializer_class = NoteSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        username = self.kwargs.get("username")
+        print(f"Fetching notes for user: {username}")
+
+        # Ensure the user exists
+        user = get_object_or_404(User, username=username)
+
+        notes = Note.objects.filter(author=user)
+        print(f"Found {notes.count()} notes for user: {username}")
+
+        return notes
 
 
 class NoteDelete(generics.DestroyAPIView):

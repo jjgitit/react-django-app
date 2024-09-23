@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NewPost from "./pages/NewPost";
 import NotFound from "./pages/NotFound";
+import UserNotes from "./pages/UserNotes";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Logout() {
@@ -50,6 +51,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/notes/:username" element={<UserNotes />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
