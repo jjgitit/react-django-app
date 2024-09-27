@@ -10,7 +10,7 @@ function UserNotes() {
 
   useEffect(() => {
     getUserNotes();
-  });
+  }, []);
 
   const getUserNotes = () => {
     api

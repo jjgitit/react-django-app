@@ -24,7 +24,7 @@ function Note({ note, onDelete }) {
   return (
     <div className="note-container">
       <p className="note-title">{note.title}</p>
-      <Link to={`notes/${note.author}`}>{note.author}</Link>
+      <Link to={`/notes/${note.author}`}>{note.author}</Link>
       <p className="note-content">{note.content}</p>
       <p className="note-date">{formattedDate}</p>
       {currentUserId === note.author && ( // Compare user IDs instead of usernames
