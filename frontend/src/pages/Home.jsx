@@ -43,7 +43,7 @@ function Home() {
           <Link to="/logout">Logout</Link>
         </nav>
       </header>
-      <div>
+      <div className="notes-cotainer">
         <h2>Posts</h2>
         {notes.map((note) => (
           <Note note={note} onDelete={deleteNote} key={note.id} />

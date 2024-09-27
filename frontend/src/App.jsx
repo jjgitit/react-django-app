@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NewPost from "./pages/NewPost";
 import NotFound from "./pages/NotFound";
+import UserNotes from "./pages/UserNotes";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Logout() {
@@ -19,7 +19,7 @@ function RegisterAndLogout() {
   //if we have token cached in our local storage
   //which can create bugs
   localStorage.clear();
-  return <Register />;
+  return <Navigate to="/login" />;
 }
 
 function App() {
@@ -50,6 +50,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/notes/:username" element={<UserNotes />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
