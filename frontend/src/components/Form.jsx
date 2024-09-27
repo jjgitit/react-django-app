@@ -1,16 +1,17 @@
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
-//TODO convert this a CSS module
-import "../styles/Form.css";
 import { useEffect, useState } from "react";
+
+// Importing the CSS module
+import styles from "../styles/Form.module.css";
 
 function Form() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const [method, setMethod] = useState("login"); //default state when user visits the app
+  const [method, setMethod] = useState("login"); // default state when user visits the app
   const [route, setRoute] = useState("/api/token/"); // for login api endpoint
 
   useEffect(() => {
@@ -41,23 +42,23 @@ function Form() {
 
   const handleRegister = () => {
     const container = document.getElementById("container");
-    container.classList.add("active");
+    container.classList.add(styles.active);
     setMethod("register");
   };
 
   const handleSignIn = () => {
     const container = document.getElementById("container");
-    container.classList.remove("active");
+    container.classList.remove(styles.active);
     setMethod("login");
   };
 
   return (
-    <div className="page">
-      <div className="container" id="container">
-        <div className="form-container sign-up">
+    <div className={styles.page}>
+      <div className={styles.container} id="container">
+        <div className={`${styles["form-container"]} ${styles["sign-up"]}`}>
           <form onSubmit={handleSubmit}>
             <h1>Create Account</h1>
-            <span>or use your email for registeration</span>
+            <span>or use your email for registration</span>
             <input
               type="text"
               placeholder="Name"
@@ -72,12 +73,12 @@ function Form() {
             <button>Sign Up</button>
           </form>
         </div>
-        <div className="form-container sign-in">
+        <div className={`${styles["form-container"]} ${styles["sign-in"]}`}>
           <form onSubmit={handleSubmit}>
             <h1>Sign In</h1>
             <input
               type="text"
-              placeholder="username"
+              placeholder="Username"
               onChange={(e) => setUsername(e.target.value)}
             />
             <input
@@ -88,21 +89,23 @@ function Form() {
             <button>Sign In</button>
           </form>
         </div>
-        <div className="toggle-container">
-          <div className="toggle">
-            <div className="toggle-panel toggle-left">
+        <div className={styles["toggle-container"]}>
+          <div className={styles.toggle}>
+            <div className={`${styles["toggle-panel"]} ${styles["toggle-left"]}`}>
               <h1>Welcome Back!</h1>
               <p>Enter your personal details to use all of site features</p>
-              <button className="hidden" id="login" onClick={handleSignIn}>
+              <button className={styles.hidden} id="login" onClick={handleSignIn}>
                 Sign In
               </button>
             </div>
-            <div className="toggle-panel toggle-right">
+            <div className={`${styles["toggle-panel"]} ${styles["toggle-right"]}`}>
               <h1>Hello, Friend!</h1>
-              <p>
-                Register with your personal details to use all of site features
-              </p>
-              <button className="hidden" id="register" onClick={handleRegister}>
+              <p>Register with your personal details to use all of site features</p>
+              <button
+                className={styles.hidden}
+                id="register"
+                onClick={handleRegister}
+              >
                 Sign Up
               </button>
             </div>
