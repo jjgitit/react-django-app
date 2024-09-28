@@ -58,6 +58,20 @@ class NoteDelete(generics.DestroyAPIView):
         """show notes you created"""
         return Note.objects.filter(author=self.request.user)
 
+class UserUpdateNote(generics.UpdateAPIView):
+    """update a note if you are the author"""
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(author=self.request.author)
+
+    def perform_update(self, serializer):
+        """ensure he user is the author"""
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)
 
 class CreateUserView(generics.CreateAPIView):
     """when creating a new user"""

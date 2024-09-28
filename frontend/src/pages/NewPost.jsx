@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import api from "../api";
+import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 
 function NewPost() {
@@ -34,29 +35,32 @@ function NewPost() {
       .catch((err) => alert(err));
   };
   return (
-    <form onSubmit={createNote}>
-      <label htmlFor="title">Title:</label>
-      <br />
-      <input
-        type="text"
-        id="title"
-        name="title"
-        required
-        onChange={(e) => setTitle(e.target.value)}
-        value={title}
-      />
-      <label htmlFor="content">Content:</label>
-      <br />
-      <textarea
-        id="content"
-        name="content"
-        required
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      ></textarea>
-      <br />
-      <input type="submit" value="Submit"></input>
-    </form>
+    <div>
+      <Header />
+      <form onSubmit={createNote}>
+        <label htmlFor="title">Title:</label>
+        <br />
+        <input
+          type="text"
+          id="title"
+          name="title"
+          required
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+        />
+        <label htmlFor="content">Content:</label>
+        <br />
+        <textarea
+          id="content"
+          name="content"
+          required
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        ></textarea>
+        <br />
+        <input type="submit" value="Submit"></input>
+      </form>
+    </div>
   );
 }
 

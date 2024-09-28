@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "../api";
 import Note from "../components/Note";
-import "../styles/Home.css";
-import { Link } from "react-router-dom";
+import Header from "../components/Header";
+import styles from "../styles/Home.module.css";
 
 function Home() {
   const [notes, setNotes] = useState([]);
@@ -35,16 +35,9 @@ function Home() {
 
   return (
     <div>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/new-post">New Post</Link>
-          <Link to="/profile">Profile</Link>
-          <Link to="/logout">Logout</Link>
-        </nav>
-      </header>
+      <Header />
+      <h2>Posts</h2>
       <div className="notes-cotainer">
-        <h2>Posts</h2>
         {notes.map((note) => (
           <Note note={note} onDelete={deleteNote} key={note.id} />
         ))}

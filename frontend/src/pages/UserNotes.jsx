@@ -1,5 +1,6 @@
 import React from "react";
 import Note from "../components/Note";
+import Header from "../components/Header";
 import api from "../api";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -21,6 +22,7 @@ function UserNotes() {
 
   return (
     <div>
+      <Header />
       <h2>Posts by {username}</h2>
       {notes.length > 0 ? (
         notes.map((note) => <Note key={note.id} note={note} />)

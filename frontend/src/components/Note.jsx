@@ -1,10 +1,10 @@
 import React from "react";
-import "../styles/Note.css";
+import styles from "../styles/Note.module.css";
 import api from "../api";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function Note({ note, onDelete }) {
+function Note({ note, onDelete, onUpdate }) {
   const formattedDate = new Date(note.created_at).toLocaleDateString("en-US");
 
   const [currentUserId, setCurrentUserId] = useState(null); // Store current user ID
@@ -22,14 +22,22 @@ function Note({ note, onDelete }) {
   }, []);
 
   return (
-    <div className="note-container">
-      <p className="note-title">{note.title}</p>
+    <div className={styles.container}>
+      <p className={styles.title}>{note.title}</p>
       <Link to={`/notes/${note.author}`}>{note.author}</Link>
-      <p className="note-content">{note.content}</p>
-      <p className="note-date">{formattedDate}</p>
+      <p className={styles.content}>{note.content}</p>
+      <p className={styles.date}>{formattedDate}</p>
       {currentUserId === note.author && ( // Compare user IDs instead of usernames
-        <button className="delete-button" onClick={() => onDelete(note.id)}>
+        <button className={styles.deleteBtn} onClick={() => onDelete(note.id)}>
           Delete
+        </button>
+      )}
+      {currentUserId === note.author && ( // Compare user IDs instead of usernames
+        <button
+          className={styles.updateBtn}
+          onClick={() => console.log('update btn')}
+        >
+          Update
         </button>
       )}
     </div>
