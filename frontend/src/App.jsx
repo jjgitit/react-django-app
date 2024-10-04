@@ -43,6 +43,14 @@ function App() {
           }
         />
         <Route
+          path="/new-post/:postId"
+          element={
+            <ProtectedRoute>
+              <NewPost />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/new-post"
           element={
             <ProtectedRoute>
@@ -50,6 +58,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route path="/notes/:username" element={<UserNotes />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />

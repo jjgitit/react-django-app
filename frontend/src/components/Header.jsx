@@ -4,7 +4,7 @@ import styles from "../styles/Header.module.css";
 function Header() {
   return (
     <header>
-      <nav>
+      <nav className={styles.navbar}>
         <Link to="/">Home</Link>
         <Link to="/new-post">New Post</Link>
         <Link to="/profile">Profile</Link>

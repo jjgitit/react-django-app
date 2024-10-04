@@ -1,0 +1,9 @@
+
+.navbar {
+  background-color: lightblue;
+  margin-bottom: 20px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

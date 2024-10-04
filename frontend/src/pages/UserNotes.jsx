@@ -11,7 +11,7 @@ function UserNotes() {
 
   useEffect(() => {
     getUserNotes();
-  }, []);
+  }, [username]);
 
   const getUserNotes = () => {
     api

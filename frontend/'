@@ -3,7 +3,6 @@ import styles from "../styles/Note.module.css";
 import api from "../api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 function Note({ note, onDelete, onUpdate }) {
   const formattedDate = new Date(note.created_at).toLocaleDateString("en-US");
@@ -38,7 +37,7 @@ function Note({ note, onDelete, onUpdate }) {
       {currentUserId === note.author && ( // Compare user IDs instead of usernames
         <button
           className={styles.updateBtn}
-          onClick={() => navigate(`/new-post/${note.id}`)}
+          onClick={() => Link(`notes/new-post/${note.id}`)}
         >
           Update
         </button>
