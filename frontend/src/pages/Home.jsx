@@ -36,8 +36,7 @@ function Home() {
   return (
     <div>
       <Header />
-      <h2>Posts</h2>
-      <div className="notes-cotainer">
+      <div className={styles.container}>
         {notes.map((note) => (
           <Note note={note} onDelete={deleteNote} key={note.id} />
         ))}

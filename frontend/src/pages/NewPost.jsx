@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../api";
 import Header from "../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
+import styles from "../styles/Newpost.module.css";
 
 function NewPost() {
   const { postId } = useParams(); // Extract noteId from params
@@ -67,29 +68,33 @@ function NewPost() {
   return (
     <div>
       <Header />
-      <form onSubmit={postId ? updateNote : createNote}>
-        <label htmlFor="title">Title:</label>
-        <br />
-        <input
-          type="text"
-          id="title"
-          name="title"
-          required
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-        />
-        <label htmlFor="content">Content:</label>
-        <br />
-        <textarea
-          id="content"
-          name="content"
-          required
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        ></textarea>
-        <br />
-        <input type="submit" value={postId ? "Update" : "Post"}></input>
-      </form>
+      <div className={styles.container}>
+        <form onSubmit={postId ? updateNote : createNote}>
+          <p>Title</p>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            required
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+          <p>Content</p>
+          <textarea
+            id="content"
+            name="content"
+            required
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          ></textarea>
+          <br />
+          <input
+            className={styles.btn}
+            type="submit"
+            value={postId ? "Update" : "Post"}
+          ></input>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,30 @@
+
+.container {
+  padding-top: 50px;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.container input {
+  width: 300px;
+  height: 30px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.container textarea {
+  width: 300px;
+  height: 200px;
+  border-radius: 5px;
+}
+
+.btn {
+  border-radius: 5px;
+  border: none;
+  background-color: lightblue;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+

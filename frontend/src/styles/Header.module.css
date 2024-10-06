@@ -6,4 +6,25 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  font-weight: bold;
 }
+
+.left {
+  display: flex;
+  gap: 100px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.logout {
+  text-decoration: none;
+  margin-right: 15px;
+}
+
