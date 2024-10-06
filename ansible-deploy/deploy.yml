@@ -1,0 +1,185 @@
+---
+- name: Create basic server on Hetzner Cloud
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    hcloud_token: "{{ lookup('env', 'HCLOUD_API_TOKEN') }}"  # Token to interact with Hetzner API
+  tasks:
+    # Creates a server on Hetzner Cloud
+    - name: Create a basic server
+      hcloud_server:
+        api_token: "{{ hcloud_token }}"
+        name: my-server  # Name of your server (Replace as needed)
+        server_type: cpx11  # Type of server (Choose based on your needs)
+        image: ubuntu-22.04  # OS image
+        location: ash  # Location of the server
+        ssh_keys: 
+          - my_ssh_key  # Your SSH key name in Hetzner (Replace with your actual key)
+        state: present
+      register: server
+
+    # Wait until SSH is available on the new server
+    - name: Wait for SSH to become available
+      wait_for:
+        host: "{{ server.hcloud_server.ipv4_address }}"
+        port: 22
+        delay: 10
+        timeout: 300
+        state: started
+
+    # Adds the server's IP to Ansible's inventory for future plays
+    - name: Add the new server to the inventory
+      add_host:
+        name: "{{ server.hcloud_server.ipv4_address }}"
+        ansible_ssh_private_key_file: /Users/jaeyeonlee/.ssh/id_ed25519  
+        ansible_user: root  # Default user for SSH access
+
+    # Set a variable for easy access to server IP
+    - name: Set server IP fact for use in other plays
+      set_fact:
+        server_ip: "{{ server.hcloud_server.ipv4_address }}"
+
+- name: Configure the newly created server
+  hosts: "{{ hostvars['localhost']['server_ip'] }}"  
+  gather_facts: true
+  remote_user: root  # SSH user
+
+  tasks:
+    # Update package lists and system packages
+    - name: Ensure system package manager update
+      apt:
+        update_cache: yes
+
+    # Install necessary packages: Python, pip, venv, and NGINX
+    - name: Install required system packages
+      apt:
+        name:
+          - python3  # Python interpreter
+          - python3-pip  # Package manager for Python
+          - python3-venv  # Virtual environment for Python
+          - nginx  # Web server to serve the application
+        state: present
+
+    # Create an application directory where your app will reside
+    - name: Create application directory
+      file:
+        path: /home/fullstack  # Replace with your app's folder path
+        state: directory
+        mode: '0755'
+
+    # Clone your project from GitHub or any Git repository
+    - name: Clone project repository
+      git:
+        repo: 'https://github.com/jjgitit/react-django-app.git'  # Replace with your Git repo URL
+        dest: /home/fullstack
+        version: main  # Branch of the repo
+
+    # Create a Python virtual environment for your project
+    - name: Create a Python virtual environment
+      command: python3 -m venv /home/fullstack/venv  # Virtualenv directory
+
+    # Install project dependencies using pip from requirements.txt
+    - name: Install Python dependencies from requirements.txt
+      pip:
+        requirements: /home/fullstack/requirements.txt  # Path to requirements.txt
+        virtualenv: /home/fullstack/venv  # Use the created virtual environment
+
+    # Apply Django migrations for SQLite database setup
+    - name: Apply Django migrations (if needed)
+      command: /home/fullstack/venv/bin/python manage.py migrate
+      args:
+        chdir: /home/fullstack/backend 
+
+    # Collect all static files for Django
+    - name: Collect static files for Django
+      command: /home/fullstack/venv/bin/python manage.py collectstatic --noinput
+      args:
+        chdir: /home/fullstack/backend  
+
+    # Create a Gunicorn systemd service to run your Django app
+    - name: Create Gunicorn systemd service
+      copy:
+        dest: /etc/systemd/system/gunicorn.service
+        content: |
+          [Unit]
+          Description=gunicorn daemon
+          After=network.target
+
+          [Service]
+          User=root
+          Group=www-data
+          WorkingDirectory=/home/your-app-folder  # Path to your app folder
+          ExecStart=/home/your-app-folder/venv/bin/gunicorn --workers 3 --bind unix:/home/your-app-folder/gunicorn.sock your_project.wsgi:application  # Replace `your_project` with your Django project name
+
+          [Install]
+          WantedBy=multi-user.target
+      notify: Restart Gunicorn
+
+    # Start and enable the Gunicorn service to run on boot
+    - name: Start and enable Gunicorn service
+      systemd:
+        name: gunicorn
+        state: started
+        enabled: yes
+
+    # Configure NGINX to serve as a reverse proxy for Gunicorn
+    - name: Configure NGINX to Proxy Pass to Gunicorn
+      copy:
+        dest: /etc/nginx/sites-available/myproject
+        content: |
+          server {
+              listen 80;
+              server_name your-domain.com your-server-ip;  # Replace with your domain and server IP
+
+              location / {
+                  proxy_pass http://unix:/home/your-app-folder/gunicorn.sock;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+              }
+
+              location /static/ {
+                  alias /home/your-app-folder/static/;  # Path to collected static files
+              }
+
+              location /media/ {
+                  alias /home/your-app-folder/media/;  # Path to media files (if any)
+              }
+          }
+      notify: Reload NGINX
+
+    # Enable the NGINX site and remove the default site
+    - name: Enable NGINX site
+      file:
+        src: /etc/nginx/sites-available/myproject
+        dest: /etc/nginx/sites-enabled/myproject
+        state: link
+
+    - name: Remove default NGINX site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    # Test the NGINX configuration to ensure it is correct
+    - name: Test NGINX configuration
+      command: nginx -t
+
+    # Restart NGINX to apply new configuration
+    - name: Restart NGINX
+      systemd:
+        name: nginx
+        state: restarted
+
+  # Handlers for restarting services if the configuration changes
+  handlers:
+    - name: Restart Gunicorn
+      systemd:
+        name: gunicorn
+        state: restarted
+
+    - name: Reload NGINX
+      systemd:
+        name: nginx
+        state: reloaded
