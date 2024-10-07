@@ -34,7 +34,7 @@ SECRET_KEY = "django-insecure-pr9qs@ssvc1_d*v9jyxu+g4%_^*&&3#v=jx=8(+yo8$oco@z^5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["byeonee.xyz", "www.byeonee.xyz"]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -147,5 +147,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://byeonee.xyz",
+]
 CORS_ALLOW_CREDENTIALS = True

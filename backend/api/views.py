@@ -47,6 +47,13 @@ class UserNoteList(generics.ListAPIView):
 
         return notes
 
+class NoteDetail(generics.RetrieveAPIView):
+    """retrieve detail of the note you want to update"""
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return Note.objects.all()
+
 
 class NoteDelete(generics.DestroyAPIView):
     """deletes notes written by you"""
@@ -64,10 +71,10 @@ class UserUpdateNote(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Note.objects.filter(author=self.request.author)
+        return Note.objects.filter(author=self.request.user)
 
     def perform_update(self, serializer):
-        """ensure he user is the author"""
+        """ensure the user is the author"""
         if serializer.is_valid():
             serializer.save(author=self.request.user)
         else:
