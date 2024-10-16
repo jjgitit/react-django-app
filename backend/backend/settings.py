@@ -32,7 +32,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 SECRET_KEY = "django-insecure-pr9qs@ssvc1_d*v9jyxu+g4%_^*&&3#v=jx=8(+yo8$oco@z^5"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["byeonee.xyz", "www.byeonee.xyz"]
 
@@ -149,5 +149,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
     "https://byeonee.xyz",
+    "http://byeonee.xyz",
 ]
 CORS_ALLOW_CREDENTIALS = True
