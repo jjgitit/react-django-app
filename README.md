@@ -12,10 +12,10 @@ This project is a Fullstack React-Django Application that enables users to manag
 ### Built With
 
 * [![React][React.js]][React-url]
-* [![Django][Django]]
-* [![NGINX][NGNIX]]
-* [![Ansible][Ansible]]
-* [![Gunicorn][Gunicorn]]
+* [![Django]]
+* [![NGINX]]
+* [![Ansible]]
+* [![Gunicorn]]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -24,7 +24,7 @@ This project is a Fullstack React-Django Application that enables users to manag
 - **User Authentication**: Register, login, and manage tokens with JWT authentication.
 - **CRUD Operations**: Perform create, read, update, and delete operations on notes.
 - **Modern Frontend**: Built with React and styled for a responsive user experience.
-- **Scalable Backend**: Django REST Framework provides secure and robust API services.
+- **Scalable Backend**: Django REST Framework provides secure and robust API services. Communicates with Frontend through Axios.
 - **Production Ready**: Deployed with NGINX and Gunicorn on Hetzner.
 
 <!-- GETTING STARTED -->
@@ -83,11 +83,19 @@ npm run dev
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+## Deployment
+This project is deployed on a Hetzner server with Ansible. Below is an overview of the deployment steps:
+### 1. Ansible Deployment Script
+Ansible is used to automate the following:
+- Install necessary packages(e.g. Python, pip, Gunicorn, NGINX)
+- Set up Gunicornas the WSGI server
+- Configure NGINX as a reverse proxy
+- Obtain and configure SSL using Let's Encrypt
+### 2. NGINX Configuration
+- Act as a reverse proxy for the React app and Django API.
+- Configuration includes SSL certificates for secure HTTPS access.
+### 3. Gunicorn
+- Handles WSGI request for the Django backend.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
